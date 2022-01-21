@@ -1,8 +1,8 @@
 import React from "react";
 import JSONPretty from "react-json-pretty";
-import * as CF from "js-client-sdk";
+import * as CF from "@harnessio/ff-javascript-client-sdk";
 
-const cf = CF.initialize("2c2a12a1-6599-406e-96c4-031a51c8a51b", { identifier: "enver" }, {
+const cf = CF.initialize("your key", { identifier: "enver" }, {
   streamEnabled: true,
 });
 
@@ -11,14 +11,14 @@ function App() {
   const [connected, setConnected] = React.useState(false);
   const [flag, setFlag] = React.useState();
   React.useEffect(() => {
-    cf.on("connected", () => {
+    cf.on(CF.Event.READY, () => {
       setConnected(true);
     });
-    cf.on("disconnected", () => {
+    cf.on(CF.Event.DISCONNECTED, () => {
       setConnected(false);
     });
-    cf.on("update", ({detail}) => {
-      setFlag(detail);
+    cf.on(CF.Event.CHANGED, (flag) => {
+      setFlag(flag);
     })
     cf.variation("bool-flag2", false);
     return () => {
